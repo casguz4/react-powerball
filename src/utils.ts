@@ -91,15 +91,13 @@ function determineWinner(
   pb: boolean
 ): number {
   if (wb <= 2 && !pb) return 0;
+  const matched = arr
+    .filter(({ matches }) => matches === wb)
+    .map(({ winnings }) => winnings);
   if (!pb) {
-    return Math.min(
-      ...arr
-        .filter(({ matches }) => matches === wb)
-        .map(({ winnings }) => winnings)
-    );
+    return Math.min(...matched);
   }
-  return arr.find(({ matches, powerball }) => matches === wb && powerball)
-    .winnings;
+  return Math.max(...matched);
 }
 
 if (import.meta.vitest) {
