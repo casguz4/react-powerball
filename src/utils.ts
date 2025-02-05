@@ -1,16 +1,5 @@
-import type { LotteryNumbers } from "./App";
+import type { LotteryNumbers } from './App';
 
-// Powerball prize table
-// if (whiteMatches === 5 && powerballMatch) return 2_000_000_000; // Jackpot (estimated)
-// if (whiteMatches === 5) return 1_000_000;
-// if (whiteMatches === 4 && powerballMatch) return 50_000;
-// if (whiteMatches === 4) return 100;
-// if (whiteMatches === 3 && powerballMatch) return 100;
-// if (whiteMatches === 3) return 7;
-// if (whiteMatches === 2 && powerballMatch) return 7;
-// if (whiteMatches === 1 && powerballMatch) return 4;
-// if (powerballMatch) return 4;
-// return 0;
 const POWERBALL_WINNINGS_TABLE: PowerballMatch[] = [
   {
     matches: 0,
@@ -55,7 +44,7 @@ const POWERBALL_WINNINGS_TABLE: PowerballMatch[] = [
   {
     matches: 5,
     powerball: true,
-    winnings: 1_000_000_000, // woah a billion dollars !!
+    winnings: 2_000_000_000, // woah a billion dollars !!
   },
 ];
 
@@ -77,17 +66,17 @@ export function generateRandomNumbers(): {
 
 export function checkWinnings(
   ticket: LotteryNumbers,
-  winning: LotteryNumbers,
+  winning: LotteryNumbers
 ): number {
   const whiteMatches = ticket.white.filter((num) =>
-    winning.white.includes(num),
+    winning.white.includes(num)
   ).length;
   const powerballMatch = ticket.powerball === winning.powerball;
 
   return determineWinner(
     POWERBALL_WINNINGS_TABLE,
     whiteMatches,
-    powerballMatch,
+    powerballMatch
   );
 }
 
@@ -99,17 +88,57 @@ type PowerballMatch = {
 function determineWinner(
   arr: PowerballMatch[],
   wb: number,
-  pb: boolean,
+  pb: boolean
 ): number {
   if (wb <= 2 && !pb) return 0;
   if (!pb) {
     return Math.min(
       ...arr
         .filter(({ matches }) => matches === wb)
-        .map(({ winnings }) => winnings),
+        .map(({ winnings }) => winnings)
     );
   }
-  return arr.find(({ matches, powerball }) => matches === wb && powerball == pb)
-    ?.winnings!;
+  return arr.find(({ matches, powerball }) => matches === wb && powerball)
+    .winnings;
 }
 
+if (import.meta.vitest) {
+  const { it, describe, expect } = import.meta.vitest;
+
+  describe('Utils — determineWinner', () => {
+    it.each`
+      whiteMatches | hasPowerball | expected
+      ${0}         | ${false}     | ${0}
+      ${2}         | ${false}     | ${0}
+      ${0}         | ${true}      | ${4}
+      ${0}         | ${true}      | ${4}
+      ${1}         | ${true}      | ${4}
+      ${2}         | ${true}      | ${7}
+      ${3}         | ${false}     | ${7}
+      ${3}         | ${true}      | ${100}
+      ${4}         | ${false}     | ${100}
+      ${4}         | ${true}      | ${50000}
+      ${5}         | ${false}     | ${1000000}
+      ${5}         | ${true}      | ${2000000000}
+    `(
+      'white balls: $whiteMatches \thas powerball: $hasPowerball \t winnings: $expected',
+      ({
+        whiteMatches,
+        hasPowerball,
+        expected,
+      }: {
+        whiteMatches: number;
+        hasPowerball: boolean;
+        expected: number;
+      }) => {
+        const result = determineWinner(
+          POWERBALL_WINNINGS_TABLE,
+          whiteMatches,
+          hasPowerball
+        );
+
+        expect(result).toBe(expected);
+      }
+    );
+  });
+}
