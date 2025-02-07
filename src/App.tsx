@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { Coins, Ticket, Play, RotateCcw, Trash2 } from "lucide-react";
-import { generateRandomNumbers, checkWinnings } from "./utils";
+import { generateRandomNumbers, checkWinnings } from "./powerball-winner";
 import DepositModal from "./components/DepositModal";
 import NumberSelector from "./components/NumberSelector";
 import WinningReveal from "./components/WinningReveal";
