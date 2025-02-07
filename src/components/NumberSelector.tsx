@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
-import type { LotteryNumbers } from '../App';
+import { useState } from "react";
 
 type NumberSelectorProps = {
-  onSubmit: (numbers: LotteryNumbers) => void;
+  onSubmit: (numbers: { white: number[]; powerball: number }) => void;
 };
 
 function NumberSelector({ onSubmit }: NumberSelectorProps) {
   const [selectedWhite, setSelectedWhite] = useState<number[]>([]);
-  const [selectedPowerball, setSelectedPowerball] = useState<number | null>(null);
+  const [selectedPowerball, setSelectedPowerball] = useState<number | null>(
+    null,
+  );
 
   const handleWhiteNumberClick = (num: number) => {
     if (selectedWhite.includes(num)) {
-      setSelectedWhite(prev => prev.filter(n => n !== num));
+      setSelectedWhite((prev) => prev.filter((n) => n !== num));
     } else if (selectedWhite.length < 5) {
-      setSelectedWhite(prev => [...prev, num].sort((a, b) => a - b));
+      setSelectedWhite((prev) => [...prev, num].sort((a, b) => a - b));
     }
   };
 
@@ -21,7 +22,7 @@ function NumberSelector({ onSubmit }: NumberSelectorProps) {
     if (selectedWhite.length === 5 && selectedPowerball !== null) {
       onSubmit({
         white: selectedWhite,
-        powerball: selectedPowerball
+        powerball: selectedPowerball,
       });
     }
   };
@@ -29,16 +30,18 @@ function NumberSelector({ onSubmit }: NumberSelectorProps) {
   return (
     <div>
       <div className="mb-6">
-        <h3 className="text-xl font-semibold mb-4">Select 5 White Numbers (1-69)</h3>
+        <h3 className="text-xl font-semibold mb-4">
+          Select 5 White Numbers (1-69)
+        </h3>
         <div className="grid grid-cols-10 gap-2">
-          {Array.from({ length: 69 }, (_, i) => i + 1).map(num => (
+          {Array.from({ length: 69 }, (_, i) => i + 1).map((num) => (
             <button
               key={num}
               onClick={() => handleWhiteNumberClick(num)}
               className={`w-10 h-10 rounded-full ${
                 selectedWhite.includes(num)
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white/10 hover:bg-white/20'
+                  ? "bg-blue-600 text-white"
+                  : "bg-white/10 hover:bg-white/20"
               } flex items-center justify-center font-semibold`}
             >
               {num}
@@ -48,16 +51,18 @@ function NumberSelector({ onSubmit }: NumberSelectorProps) {
       </div>
 
       <div className="mb-6">
-        <h3 className="text-xl font-semibold mb-4">Select Powerball Number (1-26)</h3>
+        <h3 className="text-xl font-semibold mb-4">
+          Select Powerball Number (1-26)
+        </h3>
         <div className="grid grid-cols-10 gap-2">
-          {Array.from({ length: 26 }, (_, i) => i + 1).map(num => (
+          {Array.from({ length: 26 }, (_, i) => i + 1).map((num) => (
             <button
               key={num}
               onClick={() => setSelectedPowerball(num)}
               className={`w-10 h-10 rounded-full ${
                 selectedPowerball === num
-                  ? 'bg-red-600 text-white'
-                  : 'bg-white/10 hover:bg-white/20'
+                  ? "bg-red-600 text-white"
+                  : "bg-white/10 hover:bg-white/20"
               } flex items-center justify-center font-semibold`}
             >
               {num}
@@ -78,3 +83,4 @@ function NumberSelector({ onSubmit }: NumberSelectorProps) {
 }
 
 export default NumberSelector;
+
