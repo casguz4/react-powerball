@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { X } from 'lucide-react';
+import { useState } from "react";
+import { X } from "lucide-react";
 
 type DepositModalProps = {
   isOpen: boolean;
@@ -10,7 +10,7 @@ type DepositModalProps = {
 const DEPOSIT_OPTIONS = [10, 20, 50, 100];
 
 function DepositModal({ isOpen, onClose, onDeposit }: DepositModalProps) {
-  const [customAmount, setCustomAmount] = useState('');
+  const [customAmount, setCustomAmount] = useState("");
 
   if (!isOpen) return null;
 
@@ -19,7 +19,10 @@ function DepositModal({ isOpen, onClose, onDeposit }: DepositModalProps) {
       <div className="bg-white text-gray-900 rounded-xl p-6 max-w-md w-full">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">Add Funds</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700"
+          >
             <X size={24} />
           </button>
         </div>
@@ -58,3 +61,4 @@ function DepositModal({ isOpen, onClose, onDeposit }: DepositModalProps) {
 }
 
 export default DepositModal;
+
